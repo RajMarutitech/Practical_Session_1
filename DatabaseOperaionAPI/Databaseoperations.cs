@@ -7,11 +7,9 @@ namespace DatabaseOperaionAPI
 {
     public class Databaseoperations
     {
-        SqlConnection? connection;
-
         public void InsertToSourceTable(List<SourceSchema> sources)
         {
-            using (connection = new SqlConnection(ENV.CONNECTION_STRING))
+            using (SqlConnection connection = new(ENV.CONNECTION_STRING))
             {
                 try
                 {
@@ -40,7 +38,6 @@ namespace DatabaseOperaionAPI
                 {
                     Console.WriteLine(ex.Message);
                 }
-
             }
         }
 
@@ -49,7 +46,7 @@ namespace DatabaseOperaionAPI
             List<SourceSchema> Data = new();
             try
             {
-                using (connection = new SqlConnection(ENV.CONNECTION_STRING))
+                using (SqlConnection connection = new(ENV.CONNECTION_STRING))
                 {
                     connection.Open();
                     SqlCommand cmd;
@@ -67,79 +64,44 @@ namespace DatabaseOperaionAPI
                 Console.WriteLine(ex.Message);
             }
             return Data;
-
         }
 
-        public void InsertToDestinationTable(List<DestinationSchema> destinatonData)
+        public void InsertOneDataToDestinationTable(List<SourceSchema> Data, ref int count, ref Dictionary<string, int> StatusCount)
         {
-            using (connection = new SqlConnection(ENV.CONNECTION_STRING))
+            try
             {
-                try
+                using (SqlConnection connection = new(ENV.CONNECTION_STRING))
                 {
                     connection.Open();
-                    int size = destinatonData.Count;
-                    DataTable tbl = new DataTable();
-                    tbl.Columns.Add(new DataColumn("ID", typeof(int)));
-                    tbl.Columns.Add(new DataColumn("Foreign_Key", typeof(int)));
-                    tbl.Columns.Add(new DataColumn("Sum", typeof(int)));
-                    for (int i = 0; i < size; i++)
+                    SqlCommand cmd;
+                    SqlDataAdapter adapter = new SqlDataAdapter();
+
+                    string sql = "insert into DestinationTable values (@ID, @Foreign_Key, @Sum)";
+
+                    for (int i = 0; i < Data.Count; i++)
                     {
-                        DataRow dr = tbl.NewRow();
-                        dr["ID"] = destinatonData[i].Id;
-                        dr["Foreign_Key"] = destinatonData[i].Foreign_Key;
-                        dr["Sum"] = destinatonData[i].Sum;
-                        tbl.Rows.Add(dr);
+                        cmd = new SqlCommand(sql, connection);
+                        int sum = Sum(Data[i].FirstNumber, Data[i].SecondNumber);
+                        cmd.Parameters.AddWithValue("@ID", count++);
+                        cmd.Parameters.AddWithValue("@Foreign_Key", Data[i].Id);
+                        cmd.Parameters.AddWithValue("@Sum", sum);
+                        cmd.ExecuteNonQuery();
+                        StatusCount["Completed"]++;
                     }
-                    SqlBulkCopy bulkCopy = new SqlBulkCopy(connection);
-                    bulkCopy.DestinationTableName = "DestinationTable";
-                    bulkCopy.ColumnMappings.Add("ID", "ID");
-                    bulkCopy.ColumnMappings.Add("Foreign_Key", "Foreign_Key");
-                    bulkCopy.ColumnMappings.Add("Sum", "Sum");
-                    bulkCopy.WriteToServer(tbl);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
                 }
             }
-
-
-
-        }
-
-        public void InsertOneDataToDestinationTable(List<SourceSchema> Data, ref int count)
-        {
-            using(connection = new SqlConnection(ENV.CONNECTION_STRING))
+            catch (Exception ex)
             {
-                connection.Open();
-                SqlCommand cmd;
-                SqlDataAdapter adapter = new SqlDataAdapter();
-
-                string sql = "insert into DestinationTable values (@ID, @Foreign_Key, @Sum)";
-
-                for (int i = 0; i < Data.Count; i++)
-                {
-                    cmd = new SqlCommand(sql, connection);
-                    int sum = Sum(Data[i].FirstNumber, Data[i].SecondNumber);
-                    cmd.Parameters.AddWithValue("@ID", count++);
-                    cmd.Parameters.AddWithValue("@Foreign_Key", Data[i].Id);
-                    cmd.Parameters.AddWithValue("@Sum", sum);
-                    cmd.ExecuteNonQuery();
-                }
+                Console.WriteLine(ex.Message);
             }
         }
-        public int Sum(int first, int second)
-        {
-            int res = first + second;
-            Thread.Sleep(50);
-            return res;
-        }
+            
 
         public void DeleteData(string tablename)
         {
             try
             {
-                using (connection = new SqlConnection(ENV.CONNECTION_STRING))
+                using (SqlConnection connection = new(ENV.CONNECTION_STRING))
                 {
                     connection.Open();
                     SqlCommand cmd;
@@ -155,6 +117,45 @@ namespace DatabaseOperaionAPI
                 Console.WriteLine(ex.ToString());
             }
         }
+        public int Sum(int first, int second)
+        {
+            int res = first + second;
+            Thread.Sleep(50);
+            return res;
+        }
+        //public void InsertToDestinationTable(List<DestinationSchema> destinatonData)
+        //{
+        //    using (connection = new SqlConnection(ENV.CONNECTION_STRING))
+        //    {
+        //        try
+        //        {
+        //            connection.Open();
+        //            int size = destinatonData.Count;
+        //            DataTable tbl = new DataTable();
+        //            tbl.Columns.Add(new DataColumn("ID", typeof(int)));
+        //            tbl.Columns.Add(new DataColumn("Foreign_Key", typeof(int)));
+        //            tbl.Columns.Add(new DataColumn("Sum", typeof(int)));
+        //            for (int i = 0; i < size; i++)
+        //            {
+        //                DataRow dr = tbl.NewRow();
+        //                dr["ID"] = destinatonData[i].Id;
+        //                dr["Foreign_Key"] = destinatonData[i].Foreign_Key;
+        //                dr["Sum"] = destinatonData[i].Sum;
+        //                tbl.Rows.Add(dr);
+        //            }
+        //            SqlBulkCopy bulkCopy = new SqlBulkCopy(connection);
+        //            bulkCopy.DestinationTableName = "DestinationTable";
+        //            bulkCopy.ColumnMappings.Add("ID", "ID");
+        //            bulkCopy.ColumnMappings.Add("Foreign_Key", "Foreign_Key");
+        //            bulkCopy.ColumnMappings.Add("Sum", "Sum");
+        //            bulkCopy.WriteToServer(tbl);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Console.WriteLine(ex.Message);
+        //        }
+        //    }
+        //}
     }
 
     
