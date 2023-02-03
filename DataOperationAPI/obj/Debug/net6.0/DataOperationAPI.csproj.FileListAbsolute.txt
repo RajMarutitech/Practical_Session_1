@@ -1,0 +1,12 @@
+D:\Data Migration Utility\Data_Migration_Utility\DataOperationAPI\bin\Debug\net6.0\DataOperationAPI.deps.json
+D:\Data Migration Utility\Data_Migration_Utility\DataOperationAPI\bin\Debug\net6.0\DataOperationAPI.dll
+D:\Data Migration Utility\Data_Migration_Utility\DataOperationAPI\bin\Debug\net6.0\DataOperationAPI.pdb
+D:\Data Migration Utility\Data_Migration_Utility\DataOperationAPI\obj\Debug\net6.0\DataOperationAPI.csproj.AssemblyReference.cache
+D:\Data Migration Utility\Data_Migration_Utility\DataOperationAPI\obj\Debug\net6.0\DataOperationAPI.GeneratedMSBuildEditorConfig.editorconfig
+D:\Data Migration Utility\Data_Migration_Utility\DataOperationAPI\obj\Debug\net6.0\DataOperationAPI.AssemblyInfoInputs.cache
+D:\Data Migration Utility\Data_Migration_Utility\DataOperationAPI\obj\Debug\net6.0\DataOperationAPI.AssemblyInfo.cs
+D:\Data Migration Utility\Data_Migration_Utility\DataOperationAPI\obj\Debug\net6.0\DataOperationAPI.csproj.CoreCompileInputs.cache
+D:\Data Migration Utility\Data_Migration_Utility\DataOperationAPI\obj\Debug\net6.0\DataOperationAPI.dll
+D:\Data Migration Utility\Data_Migration_Utility\DataOperationAPI\obj\Debug\net6.0\refint\DataOperationAPI.dll
+D:\Data Migration Utility\Data_Migration_Utility\DataOperationAPI\obj\Debug\net6.0\DataOperationAPI.pdb
+D:\Data Migration Utility\Data_Migration_Utility\DataOperationAPI\obj\Debug\net6.0\ref\DataOperationAPI.dll
